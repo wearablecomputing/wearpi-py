@@ -21,8 +21,8 @@ chan2 = AnalogIn(ads, ADS.P2)
 chan3 = AnalogIn(ads, ADS.P3)
 
 
-print("{:>5}\t{:>5}".format("raw", "v"))
+print("{:>5}\t{:>5}\t{:>5}\t{:>5}\t{:>5}\t{:>5}\t{:>5}\t{:>5}".format("raw0", "v0", "raw1", "v1", "raw2", "v2", "raw3", "v3",))
 
 while True:
-    print("{:>5}\t{:>5.3f}".format(chan.value, chan.voltage))
+    print("{:>5}\t{:>5}\t{:>5}\t{:>5}\t{:>5}\t{:>5}\t{:>5}\t{:>5}".format(chan0.value, chan0.voltage, chan1.value, chan1.voltage, chan2.value, chan2.voltage, chan3.value, chan3.voltage))
     time.sleep(0.4)
