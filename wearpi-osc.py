@@ -14,11 +14,15 @@ from adafruit_neokey.neokey1x4 import NeoKey1x4
 from osc4py3.as_eventloop import *
 from osc4py3 import oscbuildparse
 
+send_adc = False
+ip = "192.168.1.11"
+port = 57120
+
 # Start the system.
 osc_startup()
 
 # Make client channels to send packets.
-osc_udp_client("192.168.1.29", 57120, "client")
+osc_udp_client(ip, port, "client")
 
 # use default I2C bus
 i2c = board.I2C()
@@ -56,11 +60,12 @@ finished = False
 while not finished:
     #read adc
     current_time = time.time()
-    if current_time - last_time > 0.05:
+    if current_time - last_time > 0.05: #sampling interval
         last_time = current_time;
         # Build a message with autodetection of data types, and send it.
-        msg = oscbuildparse.OSCMessage("/adc", None, [adcChan0.value, adcChan1.value, adcChan2.value, adcChan3.value])
-        osc_send(msg, "client")
+        if send_adc:
+            msg = oscbuildparse.OSCMessage("/adc", None, [adcChan0.value, adcChan1.value, adcChan2.value, adcChan3.value])
+            osc_send(msg, "client")
     
     # read encoders
     positions = [encoder.position for encoder in encoders]
@@ -81,7 +86,7 @@ while not finished:
     for n, enc_button in enumerate(switch_vals):
         if enc_button != last_enc_button[n]:
             last_enc_button[n] = enc_button
-            msg = oscbuildparse.OSCMessage(f"/enc-but/{n}", None, [int(not enc_button)])
+            msg = oscbuildparse.OSCMessage(f"/enc-push/{n}", None, [int(not enc_button)])
             osc_send(msg, "client")            
 
     #read buttons
@@ -89,8 +94,7 @@ while not finished:
         button_val = neokey[n]
         if button_val != last_button[n]:
             last_button[n] = neokey[n]
-            keys = [int(key) for key in [neokey[3],neokey[2], neokey[1], neokey[0]] ]
-            msg = oscbuildparse.OSCMessage(f"/key/{3-n}", None, [keys[3-n]])
+            msg = oscbuildparse.OSCMessage(f"/key/{3-n}", None, [int(neokey[n])])
             osc_send(msg, "client")
 
 
