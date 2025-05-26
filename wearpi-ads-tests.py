@@ -30,5 +30,6 @@ chan3 = AnalogIn(ads, ADS.P3)
 print("{:>5}\t{:>5}\t{:>5}\t{:>5}".format("raw0", "raw1", "raw2", "raw3"))
 
 while True:
+    # print encoder values
     print("{:>5}\t{:>5}\t{:>5}\t{:>5}".format(chan0.value, chan1.value, chan2.value, chan3.value))
     time.sleep(0.05)
