@@ -63,6 +63,8 @@
 #X obj 481 45 netreceive -u -b 57120;
 #X obj 408 136 print osc-from-py;
 #X obj 564 160 print osc-from-py-parsed;
+#X msg 710 45 pd-init;
+#X obj 715 18 loadbang;
 #X connect 0 0 3 0;
 #X connect 1 0 7 0;
 #X connect 2 0 10 0;
@@ -90,3 +92,6 @@
 #X connect 28 0 31 0;
 #X connect 29 0 28 0;
 #X connect 29 0 30 0;
+#X connect 32 0 31 0;
+#X connect 32 0 30 0;
+#X connect 33 0 32 0;
