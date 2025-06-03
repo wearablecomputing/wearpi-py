@@ -346,6 +346,7 @@
 #X obj 481 458 route 0 1 2 3;
 #X obj 481 482 sel 1;
 #X obj 595 463 loadbang;
+#X obj 590 634 print random;
 #X connect 0 0 59 0;
 #X connect 1 0 3 0;
 #X connect 3 0 61 0;
@@ -417,6 +418,7 @@
 #X connect 63 7 15 0;
 #X connect 63 8 16 0;
 #X connect 63 9 17 0;
+#X connect 63 9 69 0;
 #X connect 64 0 63 0;
 #X connect 65 0 66 0;
 #X connect 66 0 67 0;
