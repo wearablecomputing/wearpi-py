@@ -276,7 +276,7 @@
 #X obj 133 378 fluid.mlpregressor mlp -hiddenlayers 5 -activation 1 -outputactivation 1 -batchsize 1 -maxiter 10000 -learnrate 0.1 -validation 0, f 42;
 #X obj 134 296 spigot;
 #X obj 192 229 t b l;
-#X obj 873 529 wearpi-controls;
+#X obj 851 513 wearpi-controls;
 #N canvas 185 231 1067 597 random 0;
 #X obj 30 114 random 1001;
 #X obj 30 138 / 1000;
@@ -343,7 +343,9 @@
 #X f 21;
 #X obj 428 492 bng 19 250 50 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000;
 #X obj 481 434 r key;
-#X obj 481 458 unpack f f f f;
+#X obj 481 458 route 0 1 2 3;
+#X obj 481 482 sel 1;
+#X obj 595 463 loadbang;
 #X connect 0 0 59 0;
 #X connect 1 0 3 0;
 #X connect 3 0 61 0;
@@ -417,3 +419,6 @@
 #X connect 63 9 17 0;
 #X connect 64 0 63 0;
 #X connect 65 0 66 0;
+#X connect 66 0 67 0;
+#X connect 67 0 64 0;
+#X connect 68 0 39 0;

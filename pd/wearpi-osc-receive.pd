@@ -1,4 +1,4 @@
-#N canvas 285 230 1098 658 12;
+#N canvas 174 161 1098 658 12;
 #X msg 93 250 disconnect;
 #X obj 63 279 netsend -u -b;
 #X obj 652 116 o.display 100 42;
