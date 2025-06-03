@@ -15,7 +15,8 @@ from osc4py3.as_eventloop import *
 from osc4py3 import oscbuildparse
 
 send_adc = False
-ip = "192.168.1.11"
+print_osc = True
+ip = "127.0.0.1"
 port = 57120
 
 # Start the system.
@@ -60,12 +61,14 @@ finished = False
 while not finished:
     #read adc
     current_time = time.time()
-    if current_time - last_time > 0.05: #sampling interval
+    if current_time - last_time > 0.5: #sampling interval
         last_time = current_time;
         # Build a message with autodetection of data types, and send it.
         if send_adc:
             msg = oscbuildparse.OSCMessage("/adc", None, [adcChan0.value, adcChan1.value, adcChan2.value, adcChan3.value])
             osc_send(msg, "client")
+            if print_osc:
+                print(msg)
     
     # read encoders
     positions = [encoder.position for encoder in encoders]
@@ -79,6 +82,8 @@ while not finished:
             last_positions[n] = rotary_pos
             msg = oscbuildparse.OSCMessage(f"/enc-rot/{n}", None, [enc_rot[n]])
             osc_send(msg, "client")
+            if print_osc:
+                print(msg)
         else:
             enc_rot[n] = 0;
 
@@ -94,8 +99,10 @@ while not finished:
         button_val = neokey[n]
         if button_val != last_button[n]:
             last_button[n] = neokey[n]
-            msg = oscbuildparse.OSCMessage(f"/key/{3-n}", None, [int(neokey[n])])
+            msg = oscbuildparse.OSCMessage(f"/key/{n}", None, [int(neokey[n])])
             osc_send(msg, "client")
+            if print_osc:
+                print(msg)
 
 
     # You can send OSC messages from your event loop too…
