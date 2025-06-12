@@ -334,7 +334,7 @@
 #X f 21;
 #X obj 449 552 bng 19 250 50 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000;
 #X obj 452 477 r key;
-#X obj 607 56 loadbang;
+#X obj 608 27 loadbang;
 #X obj 592 615 print random;
 #X obj 109 31 route 0 1 2 3;
 #X obj 109 6 r adc;
@@ -377,6 +377,7 @@
 #X obj 441 62 rot2slider;
 #X obj 327 64 rot2slider;
 #X obj 226 68 rot2slider;
+#X obj 608 51 del 200;
 #X connect 0 0 50 0;
 #X connect 1 0 3 0;
 #X connect 1 0 99 1;
@@ -453,7 +454,7 @@
 #X connect 54 9 58 0;
 #X connect 55 0 54 0;
 #X connect 56 0 86 0;
-#X connect 57 0 38 0;
+#X connect 57 0 100 0;
 #X connect 59 0 3 0;
 #X connect 59 1 5 0;
 #X connect 59 2 66 0;
@@ -499,3 +500,4 @@
 #X connect 97 0 64 0;
 #X connect 98 0 4 0;
 #X connect 99 0 1 0;
+#X connect 100 0 38 0;
