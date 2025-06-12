@@ -14,11 +14,16 @@ from adafruit_neokey.neokey1x4 import NeoKey1x4
 from osc4py3.as_eventloop import *
 from osc4py3 import oscbuildparse
 
+send_adc = False
+print_osc = False
+ip = "127.0.0.1"
+port = 57120
+
 # Start the system.
 osc_startup()
 
 # Make client channels to send packets.
-osc_udp_client("192.168.1.29", 57120, "client")
+osc_udp_client(ip, port, "client")
 
 # use default I2C bus
 i2c = board.I2C()
@@ -56,12 +61,14 @@ finished = False
 while not finished:
     #read adc
     current_time = time.time()
-    if current_time - last_time > 0.05:
+    if current_time - last_time > 0.01: #sampling interval
         last_time = current_time;
-        # print("/adc, {:>5}, {:>5}, {:>5}, {:>5}".format(adcChan0.value, adcChan1.value, adcChan2.value, adcChan3.value))
         # Build a message with autodetection of data types, and send it.
-        # msg = oscbuildparse.OSCMessage("/adc", None, [adcChan0.value, adcChan1.value, adcChan2.value, adcChan3.value])
-        # osc_send(msg, "sc_client")
+        if send_adc:
+            msg = oscbuildparse.OSCMessage("/adc", None, [adcChan0.value, adcChan1.value, adcChan2.value, adcChan3.value])
+            osc_send(msg, "client")
+            if print_osc:
+                print(msg)
     
     # read encoders
     changed = False
@@ -71,11 +78,9 @@ while not finished:
             changed = True
             if rotary_pos > last_positions[n]: 
                 enc_rot[n] = 1;
-                # print(f"Rotary #{n}: UP")
             else:
                 if rotary_pos < last_positions[n]:
                     enc_rot[n] = -1;
-                    # print(f"Rotary #{n}: DOWN")
             last_positions[n] = rotary_pos
         else:
             enc_rot[n] = 0;
@@ -83,6 +88,8 @@ while not finished:
     if changed:
         msg = oscbuildparse.OSCMessage("/enc-rot", None, enc_rot)
         osc_send(msg, "client")
+        if print_osc:
+            print(msg)
 
     changed = False
     switch_vals = [switch.value for switch in switches]
@@ -90,30 +97,26 @@ while not finished:
         if enc_button != last_enc_button[n]:
             last_enc_button[n] = enc_button
             changed = True
-            # if not enc_button:
-                # print(f"Encoder Button #{n}: pressed")
-            # else:
-                # print(f"Encoder Button #{n}: released")
             
     if changed:
         enc_but = [int(not button) for button in switch_vals]
         msg = oscbuildparse.OSCMessage("/enc-but", None, enc_but)
         osc_send(msg, "client")
+        if print_osc:
+            print(msg)
 #read buttons
     changed = False
     for n, button_val, in enumerate(button_vals):
         button_val = neokey[n]
         if button_val != last_button[n]:
             changed = True
-            # if button_val:
-                # print(f"Button #{n}: pressed")
-            # else:
-                # print(f"Button #{n}: released")
         last_button[n] = neokey[n]
     if changed:
-        keys = [int(key) for key in [neokey[3],neokey[2], neokey[1], neokey[0]] ]
+        keys = [int(key) for key in [neokey[0],neokey[1], neokey[2], neokey[3]] ]
         msg = oscbuildparse.OSCMessage("/key", None, keys)
         osc_send(msg, "client")
+        if print_osc:
+            print(msg)
 
 
     # You can send OSC messages from your event loop too…

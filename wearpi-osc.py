@@ -92,7 +92,9 @@ while not finished:
         if enc_button != last_enc_button[n]:
             last_enc_button[n] = enc_button
             msg = oscbuildparse.OSCMessage(f"/enc-push/{n}", None, [int(not enc_button)])
-            osc_send(msg, "client")            
+            osc_send(msg, "client") 
+            if print_osc:
+                print(msg)           
 
     #read buttons
     for n, button_val, in enumerate(button_vals):
