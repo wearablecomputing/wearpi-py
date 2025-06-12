@@ -377,7 +377,9 @@
 #X obj 441 62 rot2slider;
 #X obj 327 64 rot2slider;
 #X obj 226 68 rot2slider;
-#X obj 608 51 del 200;
+#X obj 608 51 del 2000;
+#X msg 694 103 "starting DSP";
+#X obj 694 127 print DSP;
 #X connect 0 0 50 0;
 #X connect 1 0 3 0;
 #X connect 1 0 99 1;
@@ -501,3 +503,5 @@
 #X connect 98 0 4 0;
 #X connect 99 0 1 0;
 #X connect 100 0 38 0;
+#X connect 100 0 101 0;
+#X connect 101 0 102 0;
