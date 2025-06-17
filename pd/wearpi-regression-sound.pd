@@ -3,7 +3,7 @@
 #X obj 259 305 tabwrite xybuf;
 #X obj 213 236 pack f 0;
 #X obj 303 67 vsl 19 162 0 1 0 0 empty empty empty 0 -9 0 12 #fcfcfc #000000 #000000 0 1;
-#X obj 306 259 pack f 1;
+#X obj 342 252 pack f 1;
 #X obj 155 636 vsl 19 162 0 1 0 0 empty empty empty 0 -9 0 12 #fcfcfc #000000 #000000 0 1;
 #X obj 177 636 vsl 19 162 0 1 0 0 empty empty empty 0 -9 0 12 #fcfcfc #000000 #000000 0 1;
 #X obj 198 636 vsl 19 162 0 1 0 0 empty empty empty 0 -9 0 12 #fcfcfc #000000 #000000 0 1;
@@ -267,7 +267,7 @@
 #X text 376 526 error;
 #X obj 154 409 fluid.mlpregressor mlp -hiddenlayers 5 -activation 1 -outputactivation 1 -batchsize 1 -maxiter 10000 -learnrate 0.1 -validation 0, f 42;
 #X obj 155 327 spigot;
-#X obj 213 270 t b l;
+#X obj 213 274 t b l;
 #X obj 1213 71 wearpi-controls;
 #N canvas 185 231 1067 597 random 0;
 #X obj 30 114 random 1001;
@@ -337,7 +337,7 @@
 #X obj 452 496 r key;
 #X obj 1056 30 loadbang;
 #X obj 594 628 print random;
-#X obj 213 148 r adc;
+#X obj 213 179 r adc;
 #X obj 138 158 bng 19 250 50 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000;
 #X obj 139 93 r key;
 #X obj 138 185 tgl 19 0 empty empty empty 0 -10 0 12 #fcfcfc #000000 #000000 0 1;
@@ -389,7 +389,7 @@
 #X obj 154 575 unpack f f f f f f f f f f f;
 #X text 835 625 learnable volume;
 #X obj 259 326 array define xybuf 2;
-#X msg 213 179 \$1;
+#X msg 213 210 \$1;
 #X obj 341 187 r adc;
 #X msg 341 218 \$1;
 #X connect 0 0 47 0;
