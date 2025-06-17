@@ -133,7 +133,7 @@ finished = False
 while not finished:
     #read adc
     current_time = time.time()
-    if current_time - last_time > 0.2: #sampling interval
+    if current_time - last_time > 0.1: #sampling interval
         last_time = current_time
         # Build a message with autodetection of data types, and send it.
         if send_adc:
