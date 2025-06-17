@@ -56,13 +56,13 @@ while not finished:
         if rotary_pos != last_positions[n]:
             changed = True
             if rotary_pos > last_positions[n]: 
-                enc_rot[n] = 1;
+                enc_rot[n] = 1
             else:
                 if rotary_pos < last_positions[n]:
-                    enc_rot[n] = -1;
+                    enc_rot[n] = -1
             last_positions[n] = rotary_pos
         else:
-            enc_rot[n] = 0;
+            enc_rot[n] = 0
             
     if changed:
         msg = oscbuildparse.OSCMessage("/enc-rot", None, enc_rot)

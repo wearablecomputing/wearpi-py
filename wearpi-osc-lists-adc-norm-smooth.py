@@ -99,7 +99,7 @@ class RobustNormalizer:
         return smoothed
 
 send_adc = True
-print_osc = True
+print_osc = False
 ip = "127.0.0.1"
 port = 57120
 
