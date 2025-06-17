@@ -1,14 +1,14 @@
-#N canvas 388 136 882 664 12;
+#N canvas 119 82 882 664 12;
 #X obj 31 46 oscparse;
 #X obj 30 12 netreceive -u -b 57120;
-#X obj 115 380 loadbang;
+#X obj 81 399 loadbang;
 #X obj 31 70 list trim;
 #X obj 150 578 print enc-rot;
 #X obj 361 578 print key;
-#X msg 115 406 pd-controls-init;
+#X msg 81 425 pd-controls-init;
 #X obj 247 577 print enc-push;
 #X obj 74 578 print adc;
-#X obj 49 299 s adc;
+#X obj 39 277 s adc;
 #X obj 453 48 oscparse;
 #X obj 453 72 list trim;
 #X obj 440 301 s enc-rot;
@@ -29,6 +29,8 @@
 #X connect 11 0 16 0;
 #X connect 15 0 10 0;
 #X connect 16 0 12 0;
+#X connect 16 0 4 0;
 #X connect 16 1 14 0;
 #X connect 16 2 13 0;
+#X connect 16 2 5 0;
 #X connect 17 0 9 0;
