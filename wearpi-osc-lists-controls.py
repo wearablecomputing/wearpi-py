@@ -45,6 +45,7 @@ last_button = [False, False, False, False]
 
 last_time = 0
 
+print("Starting controls loop \n")
 # Periodically call osc4py3 processing method in your event loop.
 finished = False
 while not finished:

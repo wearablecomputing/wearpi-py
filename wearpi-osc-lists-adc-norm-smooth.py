@@ -128,6 +128,7 @@ adcChan3 = AnalogIn(ads, ADS.P3)
 normalizer0 = RobustNormalizer(fixed_min=21000, fixed_max=26000)
 normalizer1 = RobustNormalizer(fixed_min=21000, fixed_max=26000)
 
+print("Starting adc loop \n")
 # Periodically call osc4py3 processing method in your event loop.
 finished = False
 while not finished:
