@@ -14,8 +14,8 @@ from adafruit_neokey.neokey1x4 import NeoKey1x4
 from osc4py3.as_eventloop import *
 from osc4py3 import oscbuildparse
 
-send_adc = False
-print_osc = False
+send_adc = True
+print_osc = True
 ip = "127.0.0.1"
 port = 57120
 
