@@ -125,8 +125,8 @@ adcChan1 = AnalogIn(ads, ADS.P1)
 adcChan2 = AnalogIn(ads, ADS.P2)
 adcChan3 = AnalogIn(ads, ADS.P3)
 
-normalizer0 = RobustNormalizer(fixed_min=21000, fixed_max=26000)
-normalizer1 = RobustNormalizer(fixed_min=21000, fixed_max=26000)
+normalizer0 = RobustNormalizer(fixed_min=19000, fixed_max=26000)
+normalizer1 = RobustNormalizer(fixed_min=18000, fixed_max=26000)
 
 print("Starting adc loop \n")
 # Periodically call osc4py3 processing method in your event loop.
