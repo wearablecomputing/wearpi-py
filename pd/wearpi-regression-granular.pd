@@ -1,4 +1,4 @@
-#N canvas 0 25 2560 1387 12;
+#N canvas 0 62 2560 1387 12;
 #X msg 367 384 fit xydata paramsdata;
 #X obj 259 305 tabwrite xybuf;
 #X obj 196 229 pack f 0;
@@ -250,7 +250,7 @@
 #X obj 332 233 pack f 2;
 #X msg 400 202 \$4;
 #X obj 401 236 pack f 3;
-#N canvas 1267 434 1270 853 granular 1;
+#N canvas 1267 434 1270 853 granular 0;
 #X obj 212 291 jags_module;
 #X obj 737 758 loadbang;
 #X floatatom 513 208 5 0 0 0 - - - 0;
@@ -295,7 +295,7 @@
 #X obj 524 133 scale 0 1 0 20;
 #X obj 376 168 scale 0 1 1 70;
 #X obj 259 95 scale 0 1 0.2 1.5;
-#X msg 734 782 ../snd/cello.wav;
+#X msg 734 782 ../snd/250703-004.wav;
 #X connect 1 0 44 0;
 #X connect 2 0 0 6;
 #X connect 3 0 0 0;
