@@ -1,4 +1,4 @@
-#N canvas 0 38 1512 916 12;
+#N canvas 154 132 1512 638 12;
 #X msg 367 384 fit xydata paramsdata;
 #X obj 259 305 tabwrite xybuf;
 #X obj 196 229 pack f 0;
@@ -395,5 +395,4 @@
 #X connect 138 0 132 0;
 #X connect 139 0 80 0;
 #X connect 139 0 81 0;
-#X connect 141 0 139 0;
 #X connect 142 0 139 0;
