@@ -62,3 +62,13 @@
 
 #### Osc4py3
 - https://osc4py3.readthedocs.io/en/latest/
+
+## Startup script
+
+The startup script that launches the python sctipts and pd patches on boot can be found in `/wearpi-py/shell/startup.sh`
+
+To run it on startup do the following from the terminal: 
+
+- `crontab -e` to edit the crontab file
+- Add a line like this at the end end of the file: `@reboot /home/pi/startup.sh` (make sure the path to the file is correct)
+- Ensure your script is executable: `chmod +x /home/pi/startup.sh
