@@ -1,5 +1,6 @@
 import board
 import digitalio
+import time
 
 import adafruit_seesaw.digitalio
 import adafruit_seesaw.rotaryio
@@ -25,11 +26,20 @@ osc_udp_client(ip, port, "client")
 # use default I2C bus
 i2c = board.I2C()
 
+def init_with_retry(fn, retries=5, delay=2):
+    for attempt in range(retries):
+        try:
+            return fn()
+        except Exception as e:
+            print(f"Init attempt {attempt + 1} failed: {e}")
+            if attempt < retries - 1:
+                time.sleep(delay)
+    raise RuntimeError(f"Failed to initialise after {retries} attempts")
+
 # Create a NeoKey object
-neokey = NeoKey1x4(i2c, addr=0x30)
+neokey = init_with_retry(lambda: NeoKey1x4(i2c, addr=0x30))
 
-
-seesaw = adafruit_seesaw.seesaw.Seesaw(i2c, 0x49)
+seesaw = init_with_retry(lambda: adafruit_seesaw.seesaw.Seesaw(i2c, 0x49))
 
 encoders = [adafruit_seesaw.rotaryio.IncrementalEncoder(seesaw, n) for n in range(4)]
 switches = [adafruit_seesaw.digitalio.DigitalIO(seesaw, pin) for pin in (12, 14, 17, 9)]

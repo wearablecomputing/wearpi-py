@@ -1,8 +1,6 @@
 import time
 import board
 
-import adafruit_seesaw.seesaw
-
 import adafruit_ads1x15.ads1115 as ADS
 from adafruit_ads1x15.analog_in import AnalogIn
 
@@ -115,15 +113,15 @@ i2c = board.I2C()
 # Create the ADC object using the I2C bus
 ads = ADS.ADS1115(i2c)
 
-seesaw = adafruit_seesaw.seesaw.Seesaw(i2c, 0x49)
+
 
 last_time = 0
 
 # Create single-ended input on channel 0-3
-adcChan0 = AnalogIn(ads, ADS.P0)
-adcChan1 = AnalogIn(ads, ADS.P1)
-adcChan2 = AnalogIn(ads, ADS.P2)
-adcChan3 = AnalogIn(ads, ADS.P3)
+adcChan0 = AnalogIn(ads, 0)
+adcChan1 = AnalogIn(ads, 1)
+adcChan2 = AnalogIn(ads, 2)
+adcChan3 = AnalogIn(ads, 3)
 
 normalizer0 = RobustNormalizer(fixed_min=1000, fixed_max=12000)
 normalizer1 = RobustNormalizer(fixed_min=1000, fixed_max=12000)
