@@ -18,8 +18,10 @@
 | ![IMG_2980.jpeg](images/IMG_2980.jpeg) | ![IMG_4048.jpeg](images/IMG_4048.jpeg) |
 | -------------------- | -------------------- |
 
-7. The circuit on the Proto Board consists of four voltage dividers, one per analogue input of the ADS1115. Solder and wire the ADS1115, jack sockets, and the blue potentiometers to the Pi Proto Board as shown in the picture. Please not that only the side with analogue ins of the ADS1115 is connected to the board using a pin header. For extra safety, you can connect just the pin header to the Proto Board first, complete the rest of the circuit on the back of the board, and finally solder the ADS1115 on the pins. The wiring on the picture below is colour-coded:
+7. The circuit on the Proto Board consists of four voltage dividers, one per analogue input of the ADS1115. Solder and wire the ADS1115, jack sockets, and the blue potentiometers to the Pi Proto Board as shown in the picture. Please note that only the side with analogue ins of the ADS1115 is connected to the board using a pin header. For extra safety, you can connect just the pin header to the Proto Board first, complete the rest of the circuit on the back of the board, and finally solder the ADS1115 on the pins. The wiring on the picture below is colour-coded:
 
+| Pin | Colour |
+| --- | ------ |
 | A-  | Blue   |
 | A0  | Purple |
 | A1  | Yellow |
