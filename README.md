@@ -33,6 +33,12 @@
 | ![IMG_2981.jpeg](images/IMG_2981.jpeg) | ![IMG_2980.jpeg](images/IMG_2980.jpeg) |
 | -------------------- | -------------------- |
 
+The full circuit is shown in the wiring diagram below, which also covers the Qwiic / STEMMA QT cable chain from steps 10–16. Each channel is a voltage divider. The jack's tip goes to A+. The jack's sleeve goes to the matching ADS1115 input (A0–A3) and to one end of a 500 kΩ trimmer. The trimmer's other end, with its wiper tied to it, goes to A−. The jack's ring is not connected.
+
+Optionally, add a 1 kΩ resistor in series with each trimmer, between the trimmer and A−. It isn't part of the original build, so leave it out (or use a wire link) to reproduce it exactly. It limits the current if a trimmer is turned all the way down while the sensor is pressed hard, which would otherwise short A+ to A−. It will be included on the upcoming custom PCB that replaces the protoboard.
+
+![wearpi wiring diagram](images/wearpi-wiring.svg)
+
 8. Screw in 10 mm spacers in holes you drilled on the Proto Board except for hole #5, in which instead goes a 8 mm spacer.
 9. Mount the Proto Board onto the audio card using three screws and one 10 mm spacer on mounting hole #1. 
 10. Connect the ADS1115 to the SHIM using the cable you connected in step 2. 
