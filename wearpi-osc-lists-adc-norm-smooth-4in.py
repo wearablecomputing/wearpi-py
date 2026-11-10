@@ -96,6 +96,49 @@ class RobustNormalizer:
         self.last_output = smoothed
         return smoothed
 
+def log(message):
+    print(f"{time.strftime('%Y-%m-%d %H:%M:%S')} {message}")
+
+
+class I2CErrorReporter:
+    """Rate-limited reporting of I2C read errors.
+
+    A single failed I2C read (e.g. OSError [Errno 121] Remote I/O error from a
+    loose cable or noise on the bus) should not kill the script: the caller
+    skips that sample and retries. This class logs the first failure, then a
+    reminder every `report_every` seconds while failures continue, and a
+    summary once reads succeed again, so a flaky bus can't flood the log.
+    """
+
+    def __init__(self, name, report_every=5.0):
+        self.name = name
+        self.report_every = report_every
+        self.failing_since = None  # time of first failure in the current run of failures
+        self.count = 0             # failed reads in the current run
+        self.total = 0             # failed reads since start
+        self.last_report = 0
+
+    def error(self, e):
+        now = time.time()
+        self.count += 1
+        self.total += 1
+        if self.failing_since is None:
+            self.failing_since = now
+            self.last_report = now
+            log(f"{self.name}: I2C read failed ({e}), skipping sample and retrying")
+        elif now - self.last_report >= self.report_every:
+            self.last_report = now
+            log(f"{self.name}: I2C still failing after {now - self.failing_since:.0f}s "
+                f"({self.count} failed reads), last error: {e}")
+
+    def ok(self):
+        if self.failing_since is not None:
+            log(f"{self.name}: I2C recovered after {self.count} failed read(s) over "
+                f"{time.time() - self.failing_since:.1f}s ({self.total} failed reads since start)")
+            self.failing_since = None
+            self.count = 0
+
+
 send_adc = True
 print_osc = False
 ip = "127.0.0.1"
@@ -128,6 +171,8 @@ normalizer1 = RobustNormalizer(fixed_min=1000, fixed_max=12000)
 normalizer2 = RobustNormalizer(fixed_min=8000, fixed_max=13000)
 normalizer3 = RobustNormalizer(fixed_min=900, fixed_max=1200)
 
+adc_errors = I2CErrorReporter("ADC (ADS1115)")
+
 print("Starting adc loop \n")
 # Periodically call osc4py3 processing method in your event loop.
 finished = False
@@ -138,10 +183,18 @@ while not finished:
         last_time = current_time
         # Build a message with autodetection of data types, and send it.
         if send_adc:
-            msg = oscbuildparse.OSCMessage("/adc", None, [normalizer0.normalize(adcChan0.value), normalizer1.normalize(adcChan1.value), normalizer2.normalize(adcChan2.value), normalizer3.normalize(adcChan3.value)])
-            osc_send(msg, "client")
-            if print_osc:
-                print(msg)
+            # Read all four channels first, so a failed read doesn't leave
+            # some normalizers updated and others not.
+            try:
+                raw = [adcChan0.value, adcChan1.value, adcChan2.value, adcChan3.value]
+            except OSError as e:
+                adc_errors.error(e)  # skip this sample, retry at the next interval
+            else:
+                adc_errors.ok()
+                msg = oscbuildparse.OSCMessage("/adc", None, [normalizer0.normalize(raw[0]), normalizer1.normalize(raw[1]), normalizer2.normalize(raw[2]), normalizer3.normalize(raw[3])])
+                osc_send(msg, "client")
+                if print_osc:
+                    print(msg)
     
     # You can send OSC messages from your event loop too…
     osc_process()
