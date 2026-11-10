@@ -125,3 +125,44 @@ quit
 ```
 
 `bluetoothctl info E2:16:01:30:31:30` should then show `Paired: yes`, `Bonded: yes` and `Trusted: yes`. The bond is stored, so this survives reboots.
+
+## Bottom plate
+
+![wearpi bottom plate](hardware/wearpi-bottom-plate/wearpi-bottom-plate-preview.png)
+
+A 3D-printed plate that screws onto the underside of the Raspberry Pi and lets you strap the wearpi to the body. The Pi's underside is the outer face of the stack, and its tiny SMD components are easily knocked off when the device is worn or set down. The plate keeps them off the body and protects them from impact.
+
+The files are in `hardware/wearpi-bottom-plate/`:
+
+- `wearpi-bottom-plate.stl` – ready to slice, default settings
+- `wearpi-bottom-plate.scad` – parametric OpenSCAD source
+- `wearpi-bottom-plate-preview.png` – the render above
+
+### Features
+
+- Follows the Pi 5 outline, with four 4 mm standoffs on the Pi's mounting holes (4 mm air gap under the board)
+- Counterbored screw holes, so the screw heads sit flush on the body side
+- Two 27 × 4 mm strap slots in wings at either end, sized for 25 mm webbing or Velcro
+- Cut-out under the microSD card, so it can still be removed with the plate on
+- Vent slots under the middle of the board
+
+Overall size: 109 × 56 × 7 mm.
+
+### Printing
+
+- Print flat side down, standoffs up. No supports needed.
+- PETG or ASA is recommended over PLA, since PLA can soften from body heat or in a hot car.
+- Use 3–4 walls so the bars around the strap slots are strong.
+
+### Mounting
+
+1. Unscrew the four screws that hold the 12 mm spacers on the underside of the Pi (step 3 of the assembly).
+2. Place the plate under the Pi with the standoffs on the mounting holes.
+3. Fix it with four **M2.5 × 10 mm** pan- or button-head screws through the plate and the Pi into the spacers. That gives about 3.4 mm of thread in each spacer.
+4. Pass the strap under the plate (body side), up through each slot, and around the outer bar.
+
+### Customising
+
+All dimensions are variables at the top of the `.scad` file. For example, `standoff_h`, `slot_len` / `slot_w` / `wing_w` for wider belts (up to about 44 mm), or `sd_access` and `vents` to turn those cut-outs off. When you render, OpenSCAD prints the matching screw length and overall size in the console. If you increase `standoff_h` to 5 mm, use M2.5 × 12 mm screws.
+
+Do a quick test print to check that the holes line up and nothing on the underside of the Pi touches the plate. The through-hole pins under the USB and Ethernet ports are the tallest parts there.
