@@ -3,6 +3,7 @@
 # Kill any stale instances before launching
 pkill -f "wearpi-osc-lists" 2>/dev/null
 pkill -f puredata 2>/dev/null
+pkill -f midi-watcher.sh 2>/dev/null
 sleep 1
 
 # Navigate to your project directory (adjust as needed)
@@ -23,3 +24,9 @@ MOSO=/home/wearpi/git/MoSo/abs
 # puredata -nogui -stderr -audiodev "4" -path "$FLUCOMA" -path "$MOSO" -lib fluid_libmanipulation /home/wearpi/git/wearpi-py/pd/wearpi-regression-granular-cosima-sounds.pd &
 # puredata -nogui -stderr -audiodev "4" -path "$FLUCOMA" -path "$MOSO" -lib fluid_libmanipulation /home/wearpi/git/wearpi-py/pd/wearpi-regression-fx.pd &
 puredata -nogui -stderr -audiodev "4" -path "$FLUCOMA" -path "$MOSO" -lib fluid_libmanipulation /home/wearpi/git/wearpi-py/pd/wearpi-regression-audioin-rave.pd &
+
+# Keep the OWL-BioSignals-P010 EMG board (BLE-MIDI) routed into Pd's MIDI
+# input. The watcher re-connects the two ALSA MIDI ports whenever the board
+# drops out and BlueZ reconnects it, or Pd restarts. See midi-watcher.sh for
+# details; reconnect history is logged to /tmp/midi-watcher.log.
+/home/wearpi/git/wearpi-py/shell/midi-watcher.sh &
