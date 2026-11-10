@@ -81,10 +81,47 @@ Optionally, add a 1 kΩ resistor in series with each trimmer, between the trimme
 
 ## Startup script
 
-The startup script that launches the python sctipts and pd patches on boot can be found in `/wearpi-py/shell/startup.sh`
+The startup script that launches the Python scripts and Pd patches on boot can be found in `shell/startup.sh`. It:
 
-To run it on startup do the following from the terminal: 
+1. Kills any stale instances of the Python OSC scripts, Pd and the MIDI watcher (useful when re-running it by hand). The kill patterns match the exact process names/paths, so they don't hit unrelated commands that merely mention them.
+2. Starts the Python OSC scripts (`wearpi-osc-lists-adc-norm-smooth-4in.py` and `wearpi-osc-lists-controls.py`).
+3. Launches the Pd patch in `-nogui` mode. To use a different patch, comment/uncomment the `puredata` lines.
+4. Starts the MIDI watcher (`shell/midi-watcher.sh`) in the background, see below.
+
+To run it on startup do the following from the terminal:
 
 - `crontab -e` to edit the crontab file
-- Add a line like this at the end end of the file: `@reboot /home/pi/startup.sh` (make sure the path to the file is correct)
-- Ensure your script is executable: `chmod +x /home/pi/startup.sh
+- Add a line like this at the end of the file: `@reboot /home/wearpi/git/wearpi-py/shell/startup.sh` (make sure the path to the file is correct)
+- Ensure the scripts are executable: `chmod +x shell/startup.sh shell/midi-watcher.sh`
+
+### MIDI watcher (EAVI BLE-MIDI board)
+
+The EAVI biosignal board (Bluetooth name `OWL-BioSignals-P010`) sends its data over Bluetooth LE MIDI as 14-bit pitch bends. EAVI input N arrives on MIDI channel N+1 (inputs 1–4 → channels 2–5). BlueZ exposes the board as an ALSA MIDI port, which has to be connected to Pd's MIDI input.
+
+That connection is lost whenever the EAVI reconnects (switched off, battery, out of range) or Pd restarts, because both come back as new ALSA clients. `shell/midi-watcher.sh` takes care of this:
+
+- Every second it tries `aconnect` from the EAVI's port to `Pure Data:0`. This only succeeds when both ports exist and aren't connected yet, so it re-links them within about a second of either one (re)appearing, and does nothing otherwise.
+- Ports are matched by name, not number, since ALSA client numbers can change. Both `OWL-BioSignals-P010` and `bluenrg` (the board's internal name, which it has also reported) are tried.
+- After each connect it checks that the EAVI is **bonded** and logs a warning if not (see pairing below).
+- Every (re)connection is logged with a timestamp to `/tmp/midi-watcher.log` (cleared on reboot). Check it with `cat /tmp/midi-watcher.log`.
+
+If you open a second Pd (e.g. with the GUI) while the startup Pd is running, the watcher only connects the first one. Either stop the startup Pd first (`pkill -x puredata`) or connect manually with `aconnect 'OWL-BioSignals-P010:0' <Pd client number>:0` (find the number with `aconnect -l`).
+
+`pd/test/eavi-bend-test.pd` shows the incoming EAVI data per input (raw value, slider, normalised value, message rate), handy to check the connection.
+
+#### Pairing the EAVI (one time)
+
+The EAVI only sends MIDI over an encrypted connection, so it must be paired with its passkey. If it isn't (or the bond is lost, e.g. after pairing the EAVI with another computer), it still shows as connected and gets a MIDI port, but **no data arrives** and the connection drops every ~30 s. To pair:
+
+```
+bluetoothctl
+remove E2:16:01:30:31:30     # only if it was added before
+scan on                      # wait for OWL-BioSignals-P010 to appear
+scan off
+pair E2:16:01:30:31:30       # enter the EAVI's passkey when asked
+trust E2:16:01:30:31:30      # lets BlueZ reconnect it automatically
+connect E2:16:01:30:31:30
+quit
+```
+
+`bluetoothctl info E2:16:01:30:31:30` should then show `Paired: yes`, `Bonded: yes` and `Trusted: yes`. The bond is stored, so this survives reboots.
