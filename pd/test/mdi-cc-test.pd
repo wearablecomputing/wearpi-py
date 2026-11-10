@@ -1,0 +1,11 @@
+#N canvas 415 185 450 300 12;
+#X obj 81 64 ctlin;
+#X text 112 152 value;
+#X text 128 122 controller #;
+#X text 140 90 channel/port;
+#X floatatom 81 151 4 0 127 0 - - - 0;
+#X floatatom 97 122 4 0 127 0 - - - 0;
+#X floatatom 113 89 0 1 64 0 - - - 0;
+#X connect 0 0 4 0;
+#X connect 0 1 5 0;
+#X connect 0 2 6 0;
