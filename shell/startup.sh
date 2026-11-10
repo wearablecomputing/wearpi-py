@@ -1,9 +1,14 @@
 #!/bin/bash
 
-# Kill any stale instances before launching
-pkill -f "wearpi-osc-lists" 2>/dev/null
-pkill -f puredata 2>/dev/null
-pkill -f midi-watcher.sh 2>/dev/null
+# Kill any stale instances before launching.
+# Patterns are anchored/exact so they only hit the real processes, not any
+# other command whose arguments happen to mention these names.
+# Python scripts: match the interpreter + script path at the start of the command line.
+pkill -f '^/home/wearpi/env/bin/python3 /home/wearpi/git/wearpi-py/wearpi-osc-lists' 2>/dev/null
+# Pd: exact process name, "puredata" when started here, "pd" when opened via the GUI.
+pkill -x 'puredata|pd' 2>/dev/null
+# MIDI watcher: exact process name.
+pkill -x midi-watcher.sh 2>/dev/null
 sleep 1
 
 # Navigate to your project directory (adjust as needed)
