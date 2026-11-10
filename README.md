@@ -84,7 +84,7 @@ Optionally, add a 1 kΩ resistor in series with each trimmer, between the trimme
 The startup script that launches the Python scripts and Pd patches on boot can be found in `shell/startup.sh`. It:
 
 1. Kills any stale instances of the Python OSC scripts, Pd and the MIDI watcher (useful when re-running it by hand). The kill patterns match the exact process names/paths, so they don't hit unrelated commands that merely mention them.
-2. Starts the Python OSC scripts (`wearpi-osc-lists-adc-norm-smooth-4in.py` and `wearpi-osc-lists-controls.py`).
+2. Starts the Python OSC scripts (`wearpi-osc-lists-adc-norm-smooth-4in.py` and `wearpi-osc-lists-controls.py`). Their output, including any error tracebacks, goes to `/tmp/wearpi-adc.log` and `/tmp/wearpi-controls.log` (cleared on reboot), together with timestamped start and exit lines. If a script dies, the exit line shows how, e.g. `exited with code 1` for a Python error (see the traceback above it) or `exited with code 132 (SIGILL)` for a crash.
 3. Launches the Pd patch in `-nogui` mode. To use a different patch, comment/uncomment the `puredata` lines.
 4. Starts the MIDI watcher (`shell/midi-watcher.sh`) in the background, see below.
 

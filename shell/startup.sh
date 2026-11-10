@@ -14,11 +14,39 @@ sleep 1
 # Navigate to your project directory (adjust as needed)
 cd /home/wearpi/git/wearpi-py
 
-# Start Python scripts in the background
+# Run a command in the background, logging its output and how it ended.
+# Usage: run_logged <logfile> <command> [args...]
+# Appends to <logfile>: a timestamped start line, everything the command prints
+# (stdout and stderr, e.g. Python tracebacks), and a timestamped exit line with
+# the exit code. If the process was killed by a signal (e.g. 132 = SIGILL
+# "Illegal instruction", 139 = SIGSEGV, 137 = SIGKILL from the OOM killer,
+# 143 = SIGTERM from the pkill above) the signal name is added, since Python
+# itself prints nothing in that case.
+run_logged() {
+    local log=$1
+    shift
+    (
+        echo "$(date '+%F %T') starting: $*" >> "$log"
+        "$@" >> "$log" 2>&1
+        code=$?
+        sig=""
+        if [ "$code" -gt 128 ]; then
+            sig=" (SIG$(kill -l $((code - 128)) 2>/dev/null))"
+        fi
+        # name the script (last argument), not the interpreter
+        echo "$(date '+%F %T') $(basename "${!#}") exited with code $code$sig" >> "$log"
+    ) &
+}
 
-/home/wearpi/env/bin/python3 /home/wearpi/git/wearpi-py/wearpi-osc-lists-adc-norm-smooth-4in.py &
+# Unbuffered Python output, so nothing is lost in a buffer if a script dies.
+# (Set via the environment rather than "python3 -u" to keep the command lines
+# matched by the pkill pattern above unchanged.)
+export PYTHONUNBUFFERED=1
+
+# Start Python scripts in the background, logging to /tmp (cleared on reboot)
+run_logged /tmp/wearpi-adc.log /home/wearpi/env/bin/python3 /home/wearpi/git/wearpi-py/wearpi-osc-lists-adc-norm-smooth-4in.py
 sleep 2
-/home/wearpi/env/bin/python3 /home/wearpi/git/wearpi-py/wearpi-osc-lists-controls.py &
+run_logged /tmp/wearpi-controls.log /home/wearpi/env/bin/python3 /home/wearpi/git/wearpi-py/wearpi-osc-lists-controls.py
 sleep 2
 
 # Launch Pd patch in nogui mode
